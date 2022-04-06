@@ -1,0 +1,8 @@
+prefix=/home/irving/catkin_ws2/src/final_test/cmake-build-debug/devel
+
+Name: final_test
+Description: Description of final_test
+Version: 0.0.0
+Cflags: -I/home/irving/catkin_ws2/src/final_test/cmake-build-debug/devel/include
+Libs: -L${prefix}/lib 
+Requires: roscpp sensor_msgs message_runtime

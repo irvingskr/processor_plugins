@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager"  args="manager" output="screen">
+  <param name="image_transport" value="compressed" />
+    </node>
+
+  <node pkg="nodelet" type="nodelet" name="final_test" args="load processor/Processor nodelet_manager" output="screen">
+<!--   <param name="image_transport" value="compressed" /> -->
+  </node>
+</launch>

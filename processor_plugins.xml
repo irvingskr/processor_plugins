@@ -1,0 +1,8 @@
+<library path="lib/libfinal_test">
+    <class
+            name="processor/Processor"
+            type="processor::Processor"
+            base_class_type="nodelet::Nodelet">
+    <description>This is a image process plugin.</description>
+    </class>
+</library>

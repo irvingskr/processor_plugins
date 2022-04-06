@@ -1,0 +1,22 @@
+# ninja log v5
+7707	8345	1647276957717127784	final	9f292d85a3a6b2e4
+0	30	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+1	840	1647428186817770911	build.ninja	43b275fcd7f0dbf9
+3	7707	1647276957073122973	CMakeFiles/final.dir/src/main.cpp.o	b7f1ce7eada48d0c
+0	30	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	29	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	29	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+3	8304	1647428210092639610	CMakeFiles/final.dir/src/main.cpp.o	b7f1ce7eada48d0c
+8304	8903	1647428210696803493	final	9f292d85a3a6b2e4
+0	36	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	36	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+4	7835	1647428256712102395	CMakeFiles/final.dir/src/main.cpp.o	b7f1ce7eada48d0c
+7836	8417	1647428257288153812	final	9f292d85a3a6b2e4
+0	30	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	30	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	34	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	34	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	28	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	28	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	28	0	CMakeFiles/clean_test_results	eeed3c6269ad3f6a
+0	28	0	/home/irving/catkin_ws2/src/final_test/cmake-build-debug/CMakeFiles/clean_test_results	eeed3c6269ad3f6a
