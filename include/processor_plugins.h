@@ -48,6 +48,12 @@ public:
                 cam_sub_ = it_->subscribeCamera("/galaxy_camera/image_raw", 1000,&processor::Processor::infoCallback1, this);
                 p_nh_ = ros::NodeHandle(p_nh,"reciever_node");
     }
+
+    void bgrToBinary();
+
+    void imageProcess();
+
+    cv::Mat setElement();
 private:
     ros::NodeHandle p_nh_;
     ros::Publisher publisher = p_nh_.advertise<sensor_msgs::Image>("camera/image", 1);
@@ -60,5 +66,7 @@ private:
     void infoCallback1(const sensor_msgs::ImageConstPtr &msg2,const sensor_msgs::CameraInfoConstPtr &msg);
     tf::TransformBroadcaster broadcaster_;
     tf::Transform transform_;
+    cv::Mat binary_image_;
+    cv::Mat morpro_image_;
 };
 }
