@@ -20,6 +20,8 @@
 #include <pluginlib/class_loader.h>
 #include <image_transport/image_transport.h>
 #include <image_transport/camera_subscriber.h>
+#include <dynamic_reconfigure/server.h>
+#include <processor_plugins/processor_pluginsConfig.h>
 #endif //SRC_PROCESSOR_PLUGIN_H
 
 namespace processor
@@ -54,6 +56,11 @@ public:
     void imageProcess();
 
     cv::Mat setElement();
+
+    dynamic_reconfigure::Server<processor_plugins::processor_pluginsConfig>* processor_cfg_srv_;
+    dynamic_reconfigure::Server<processor_plugins::processor_pluginsConfig>::CallbackType processor_cfg_cb_;
+
+    void processorconfigCB(processor_plugins::processor_pluginsConfig& config, uint32_t level);
 private:
     ros::NodeHandle p_nh_;
     ros::Publisher publisher = p_nh_.advertise<sensor_msgs::Image>("camera/image", 1);
@@ -68,5 +75,11 @@ private:
     tf::Transform transform_;
     cv::Mat binary_image_;
     cv::Mat morpro_image_;
+    int target_color_;
+    int binary_thresh_;
+    int binary_element_;
+    int direction_dif_;
+    double bars_ratio_;
+    int morph_type_;
 };
 }

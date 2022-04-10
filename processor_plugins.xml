@@ -1,4 +1,4 @@
-<library path="lib/libfinal_test">
+<library path="lib/libprocessor_plugins">
     <class
             name="processor/Processor"
             type="processor::Processor"

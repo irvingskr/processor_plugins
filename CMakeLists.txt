@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(final_test)
+project(processor_plugins)
 set(CMAKE_CXX_FLAGS"-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
@@ -18,6 +18,7 @@ find_package(
   message_generation
   tf
   nodelet
+        dynamic_reconfigure
 )
 find_package(
   OpenCV REQUIRED
@@ -28,6 +29,9 @@ find_package(
 find_package(
   Boost REQUIRED
         )
+generate_dynamic_reconfigure_options(
+        cfg/processor_plugin.cfg
+)
 #add_executable(final src/processor_plugins.cpp include/processor_plugin.h)
 
 add_message_files(
@@ -132,7 +136,12 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES final_test
-  CATKIN_DEPENDS  roscpp sensor_msgs message_runtime nodelet image_transport
+  CATKIN_DEPENDS
+        roscpp
+        sensor_msgs
+        message_runtime
+        nodelet image_transport
+        dynamic_reconfigure
 #  DEPENDS system_lib
 )
 
@@ -159,8 +168,12 @@ add_library(${PROJECT_NAME}
    src/processor_plugins.cpp
 )
 
+add_dependencies(${PROJECT_NAME}
+        ${PROJECT_NAME}_gencfg
+        )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${catkin_LIBRARIES})
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure

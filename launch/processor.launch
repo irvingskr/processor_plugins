@@ -5,7 +5,8 @@
   <param name="image_transport" value="compressed" />
     </node>
 
-  <node pkg="nodelet" type="nodelet" name="final_test" args="load processor/Processor nodelet_manager" output="screen">
+  <node pkg="nodelet" type="nodelet" name="processor_plugins" args="load processor/Processor nodelet_manager" output="screen">
 <!--   <param name="image_transport" value="compressed" /> -->
   </node>
+  <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen" />
 </launch>

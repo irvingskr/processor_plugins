@@ -40,18 +40,18 @@ namespace processor {
         std::vector<cv::Mat> channels;
 
         split(this->img_, channels);
-        if (0)
+        if (target_color_)
             binary_image_ = channels[2] - channels[0];
         else
             binary_image_ = channels[0] - channels[2];
-        threshold(binary_image_, binary_image_, 150, 255, cv::THRESH_BINARY);
+        threshold(binary_image_, binary_image_, binary_thresh_, 255, cv::THRESH_BINARY);
     }
 
     void Processor::imageProcess()
     {
         cv::Mat element = setElement();
         bgrToBinary();
-        if (1)
+        if (target_color_)
             morphologyEx(binary_image_, morpro_image_, cv::MORPH_CLOSE, element);
         else
             binary_image_.copyTo(morpro_image_);
@@ -59,7 +59,7 @@ namespace processor {
 
     cv::Mat Processor::setElement()
     {
-        return getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5,5), cv::Point(-1, -1));
+        return getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(binary_element_,binary_element_), cv::Point(-1, -1));
     }
 //找出灯条的最高点
     std::vector<cv::Point> Processor::findHighest(std::vector<std::vector<cv::Point>> contours) {
@@ -94,7 +94,7 @@ namespace processor {
 
 //找出灯条的最低点
     std::vector<cv::Point> Processor::findLowest(std::vector<std::vector<cv::Point>> contours) {
-        int a = 0, c = 0;
+        int a , c = 0;
         std::vector<cv::Point> lowest(5);
         for (int i = 0; i < 4; i++) {
             lowest[i] = cv::Point(0, 0);
@@ -146,7 +146,7 @@ namespace processor {
 //配对灯条并寻找装甲板
     void Processor::armorMarker(std::vector<cv::Point> highest, std::vector<cv::Point> lowest, cv::Mat &img, cv::Mat K,
                                 std::vector<double, std::allocator<void>::rebind<double>::other> D) {
-        int f = 0, g = 0, h = 0, e = 0;
+        int f = 0,g = 0,e = 0;
         for (int i = 0; i < 4; i++) {
             e = 0;
             if (highest[i] != cv::Point(0, 0) && lowest[i] != cv::Point(0, 0)) {
@@ -175,7 +175,7 @@ namespace processor {
                                         }
                                     }
                                     double s = (highest[l].y*1.0 - lowest[l].y)/(highest[i].y - lowest[i].y);
-                                    if (f == 0 && s > (1/1.6) && s < 1.6/*&& (highest[l].y - lowest[l].y)*(highest[i].y - lowest[i].y)!=0*/ /*&& (highest[l].y - lowest[l].y)/(highest[i].y - lowest[i].y)*1.0 > 0.5 && (highest[l].y - lowest[l].y)/(highest[i].y - lowest[i].y)*1.0 < 5*/) {
+                                    if (f == 0 && s > (1/bars_ratio_) && s < bars_ratio_/*&& (highest[l].y - lowest[l].y)*(highest[i].y - lowest[i].y)!=0*/ /*&& (highest[l].y - lowest[l].y)/(highest[i].y - lowest[i].y)*1.0 > 0.5 && (highest[l].y - lowest[l].y)/(highest[i].y - lowest[i].y)*1.0 < 5*/) {
                                         g = -10;
                                         std::vector<cv::Point2f> d2;
                                         if (highest[i].x > highest[l].x) {
@@ -192,7 +192,7 @@ namespace processor {
                                             d2.push_back(lowest[i]);
                                             d2.push_back(lowest[l]);
                                         }
-                                        if (g < 600 && g > -600) {
+                                        if (g < direction_dif_ && g > -direction_dif_) {
                                             cv::line(img, highest[i], highest[l], cv::Scalar(0, 0, 255), 2);
                                             cv::line(img, lowest[i], lowest[l], cv::Scalar(0, 0, 255), 2);
                                             cv::line(img, highest[i], lowest[i], cv::Scalar(0, 0, 255), 2);
@@ -206,7 +206,7 @@ namespace processor {
                         }
                         //将最接近的灯条与当前灯条i构成矩形
                         double s = (highest[j].y*1.0 - lowest[j].y)/(highest[i].y- lowest[i].y);
-                        if (e == 0 && s < 1.6 && s > (1/1.6)/*(highest[j].y - lowest[j].y)*(highest[i].y- lowest[i].y)!=0*//*&& (highest[j].y - lowest[j].y)/(highest[i].y- lowest[i].y)*1.0 > 0.5 && (highest[j].y - lowest[j].y)/(highest[i].y- lowest[i].y)*1.0 < 5*/) {
+                        if (e == 0 && s < bars_ratio_ && s > (1/bars_ratio_)/*(highest[j].y - lowest[j].y)*(highest[i].y- lowest[i].y)!=0*//*&& (highest[j].y - lowest[j].y)/(highest[i].y- lowest[i].y)*1.0 > 0.5 && (highest[j].y - lowest[j].y)/(highest[i].y- lowest[i].y)*1.0 < 5*/) {
                             g = -10;
                             std::vector<cv::Point2f> d2;
                             if (highest[i].x > highest[j].x) {
@@ -223,7 +223,7 @@ namespace processor {
                                 d2.push_back(lowest[i]);
                                 d2.push_back(lowest[j]);
                             }
-                            if (g < 600 && g > -600) {
+                            if (g < direction_dif_ && g > -direction_dif_) {
                                 cv::line(img, highest[i], highest[j], cv::Scalar(0, 0, 255), 2);
                                 cv::line(img, lowest[i], lowest[j], cv::Scalar(0, 0, 255), 2);
                                 cv::line(img, highest[i], lowest[i], cv::Scalar(0, 0, 255), 2);
@@ -292,7 +292,7 @@ namespace processor {
         armorMarker(highest, lowest, img_, K, D);
 
         tfBroadcast();
-
+        std::cout<<target_color_;
         cv::imshow("a", img_);
         cv::waitKey(30);
 
@@ -308,9 +308,20 @@ namespace processor {
 
     }
 
+    void Processor::processorconfigCB(processor_plugins::processor_pluginsConfig &config, uint32_t level) {
+        target_color_ = config.target_color;
+        binary_thresh_ = config.binary_thresh;
+        binary_element_ = config.binary_element;
+        morph_type_ = config.morph_type;
+        direction_dif_ = config.direction_dif;
+        bars_ratio_ = config.bars_ratio;
+    }
 
     void Processor::onInit(){
             auto& n = getPrivateNodeHandle();
+            processor_cfg_srv_ = new dynamic_reconfigure::Server<processor_plugins::processor_pluginsConfig>(ros::NodeHandle(n, "preprocess_condition"));
+            processor_cfg_cb_ = boost::bind(&Processor::processorconfigCB, this, _1, _2);
+            processor_cfg_srv_->setCallback(processor_cfg_cb_);
 //            message_filters::Subscriber<sensor_msgs::CameraInfo> sub_imu_accel(n, "/galaxy_camera/camera_info", 1, ros::TransportHints().tcpNoDelay());
 //            message_filters::Subscriber<sensor_msgs::CompressedImage> sub_imu_gyro(n, "/galaxy_camera/image_raw/compressed", 1, ros::TransportHints().tcpNoDelay());
 //

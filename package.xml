@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>final_test</name>
+  <name>processor_plugins</name>
   <version>0.0.0</version>
-  <description>The final_test package</description>
+  <description>The processor_plugins package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -50,6 +50,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <depend>nodelet</depend>
+  <depend>dynamic_reconfigure</depend>
   <build_depend>OpenCV</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>
